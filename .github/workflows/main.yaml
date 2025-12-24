@@ -26,5 +26,5 @@ jobs:
     needs: call-build-release
     uses: ./.github/workflows/release.yaml
     with:
-      artifact-name: ${{ needs.call-call-build-release.outputs.artifact-name }}
+      artifact-name: ${{ needs.call-build-release.outputs.artifact-name }}
       git-tag-version: ${{ github.ref_name }}
