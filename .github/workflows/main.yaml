@@ -9,22 +9,25 @@ on:
     types: [published]
 
 jobs:
-  call-build-ci:
+  # Build Job for CI
+  ci-build:
     uses: ./.github/workflows/build.yaml
     with:
       build-mode: 'ci'
     if: github.event_name == 'pull_request'
 
-  call-build-release:
+  # Build Job for Release
+  release-build:
     uses: ./.github/workflows/build.yaml
     with:
       build-mode: 'release'
       git-tag-version: ${{ github.ref_name }}
     if: github.event_name == 'release'
 
-  call-release:
-    needs: call-build-release
+  # Release Job
+  release:
+    needs: release-build
     uses: ./.github/workflows/release.yaml
     with:
-      artifact-name: ${{ needs.call-build-release.outputs.artifact-name }}
+      artifact-name: ${{ needs.release-build.outputs.artifact-name }}
       git-tag-version: ${{ github.ref_name }}
