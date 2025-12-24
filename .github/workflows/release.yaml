@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'The name of artifacts to release'
+        required: true
+        type: string
+      git-tag-version:
+        description: 'git tag name starting with v'
+        required: true
+        type: string
+
+env:
+  RELEASE_FILE: ""
+
+jobs:
+  release:
+    name: release
+    runs-on: ubuntu-latest
+    steps:
+      # Download artifact
+      # https://github.com/actions/download-artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      # Set Release file name
+      - name: Set Release file name
+        run: |
+          VERSION=$(echo ${{ inputs.git-tag-version }} | sed -n 's/v\([0-9]*\.[0-9]*\.[0-9]\)/\1/p' )
+          echo "RELEASE_FILE=StarrySky-${VERSION}_bin.zip" >> $GITHUB_ENV
+
+      # Packaging
+      - name: Packaging
+        run: |
+          zip -r ${{ env.RELEASE_FILE }} ./StarrySky.vsix
+
+      # Upload release Assets
+      # https://github.com/AButler/upload-release-assets
+      - uses: AButler/upload-release-assets@v3.0
+        with:
+          files:  ${{ env.RELEASE_FILE }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          release-tag: ${{ inputs.git-tag-version }}
