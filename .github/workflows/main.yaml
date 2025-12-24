@@ -54,6 +54,13 @@ jobs:
       - name: Release Drafter
         uses: release-drafter/release-drafter@v6
         with:
-            config-name: 'release-drafter.yaml'
+          config-name: 'release-drafter.yaml'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: |
+          github.event_name == 'pull_request' &&
+          (
+            github.event.action == 'opened' ||
+            github.event.action == 'reopened' ||
+            github.event.action == 'synchronize'
+          )
