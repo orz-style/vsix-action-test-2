@@ -68,7 +68,7 @@ jobs:
         with:
           version: "${{ env.BUILD_VERSION }}.${{ github.run_number }}"
           vsix-manifest-file: './src/StarrySky/source.extension.vsixmanifest'
-        if: inputs.build-type == 'ci'
+        if: inputs.build-mode == 'ci'
 
       # Version Check
       - name: Version Check
@@ -81,7 +81,7 @@ jobs:
             Write-Output "Version Mismatch!"
             exit 1
           }
-        if: inputs.build-type == 'release'
+        if: inputs.build-mode == 'release'
 
       # Restore Apps
       - name: Restore the app
