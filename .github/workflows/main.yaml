@@ -55,7 +55,7 @@ jobs:
         uses: release-drafter/release-drafter@v5
         with:
           config-name: 'release-drafter.yaml'
-          commitish: main
+          commitish: main # Required if master branch does not exist
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         if: |
