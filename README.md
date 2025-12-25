@@ -3,3 +3,5 @@
 ## Test of Release drafter
 
 ## Test of Release drafter #2
+
+Why doesn't release drafter work well?
