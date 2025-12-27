@@ -10,6 +10,7 @@ on:
 
 env:
     TAG_NAME: ""
+    REPOSITORY: "artifacts/starry-sky"
 
 jobs:
   push:
@@ -21,15 +22,6 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           name: ${{ inputs.artifact-name }}
-
-      - name: Debug Info
-        run: |
-          ls -la
-          echo "REGS=${{ vars.ORAS_REGISTRY }}"
-          echo "USER=${{ vars.ORAS_USERNAME }}"
-          echo "PASS=${{ vars.ORAS_PASSWORD }}"
-          echo "USER=${{ secrets.ORAS_USERNAME }}"
-          echo "PASS=${{ secrets.ORAS_PASSWORD }}"
 
       # Retrieve version from artifact name
       - name: Retrieve version from artifact name
@@ -43,19 +35,20 @@ jobs:
         with:
           version: 1.2.3
 
-      # ORAS Login
+      # ORAS Registry Login
       - name: ORAS Login
         run: |
           echo ${{ secrets.ORAS_PASSWORD }} | \
           oras login ${{ vars.ORAS_REGISTRY }} -u '${{ secrets.ORAS_USERNAME }}' --password-stdin
 
-      # Push artifact using ORAS
+      # Push artifact using ORAS CLI
       - name: Push artifact
         run: |
-          oras push ${{ vars.ORAS_REGISTRY }}/artifacts/starry-sky:v${{ env.TAG_NAME }} \
+          oras push ${{ vars.ORAS_REGISTRY }}/${{ env.REPOSITORY }}:v${{ env.TAG_NAME }} \
           StarrySky.vsix \
           --annotation "pushd-by=github-actions"
 
-      - name: Tag latest
+      # Put latest tag
+      - name: Put latest tag
         run: |
-          oras tag ${{ vars.ORAS_REGISTRY }}/artifacts/starry-sky:v${{ env.TAG_NAME }} latest
+          oras tag ${{ vars.ORAS_REGISTRY }}/${{ env.REPOSITORY }}:v${{ env.TAG_NAME }} latest
