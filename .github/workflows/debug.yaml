@@ -39,7 +39,7 @@ jobs:
         run: |
           oras push ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} \
           regname.txt \
-          --annotation stringArray "pushd-by=github-actions"
+          --annotation "pushd-by=github-actions"
     
       - name: Tag latest
         run: |

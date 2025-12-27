@@ -54,7 +54,7 @@ jobs:
         run: |
           oras push ${{ vars.ORAS_REGISTRY }}/artifacts/starry-sky:v${{ env.TAG_NAME }} \
           StarrySky.vsix \
-          --annotation stringArray "pushd-by=github-actions"
+          --annotation "pushd-by=github-actions"
 
       - name: Tag latest
         run: |
