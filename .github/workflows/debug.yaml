@@ -20,7 +20,7 @@ jobs:
           echo "USER=${{ secrets.ORAS_USERNAME }}"
           echo "PASS=${{ secrets.ORAS_PASSWORD }}"
           echo ${{ vars.ORAS_REGISTRY }} > regname.txt
-          echo "TAG_NAME=1.0.0" >> $GITHUB_ENV
+          echo "TAG_NAME=1.1.0" >> $GITHUB_ENV
 
       # Install ORAS CLI using the official action
       # https://github.com/marketplace/actions/setup-oras
@@ -38,7 +38,8 @@ jobs:
       - name: Push artifact
         run: |
           oras push ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} \
-          regname.txt
+          regname.txt \
+          --annotation stringArray "pushd-by=github-actions"
     
       - name: Tag latest
         run: |
