@@ -31,9 +31,8 @@ jobs:
       # ORAS Login
       - name: ORAS Login
         run: |
-          echo ${{ secrets.ORAS_PASSWORD }} | \
           oras login ${{ vars.ORAS_REGISTRY }} -u ${{ secrets.ORAS_USERNAME }} \
-          --password-stdin
+          -p ${{ secrets.ORAS_PASSWORD }}
 
       # Push artifact using ORAS
       - name: Push artifact
