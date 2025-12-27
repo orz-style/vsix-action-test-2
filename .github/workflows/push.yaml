@@ -1,0 +1,53 @@
+name: Push
+
+on:
+  workflow_call:
+    inputs:
+      artifact-name:
+        description: 'The name of artifacts to push'
+        required: true
+        type: string
+
+env:
+    TAG_NAME: ""
+
+jobs:
+  push:
+    name: push
+    runs-on: ubuntu-latest
+    steps:
+      # Download artifact
+      # https://github.com/actions/download-artifact
+      - uses: actions/download-artifact@v5
+        with:
+          name: ${{ inputs.artifact-name }}
+
+      - name: Debug Info
+        run: |
+          ls -la
+
+      # Retrieve version from artifact name
+      - name: Retrieve version from artifact name
+        run: |
+          VERSION=$(echo ${{ inputs.artifact-name }} | sed -n 's/StarrySky-\([0-9.]*\)/\1/p' )
+          echo "TAG_NAME=$VERSION" >> $GITHUB_ENV
+
+      # Install ORAS CLI using the official action
+      # https://github.com/marketplace/actions/setup-oras
+      - uses: oras-project/setup-oras@v1
+        with:
+          version: 1.2.4
+
+      # Push artifacts using ORAS
+      # https://github.com/marketplace/actions/oras-push-action
+      - name: Push Artifacts
+        uses: 1k-off/action-oras-push@v1
+        with:
+          registry: ${{ vars.ORAS_REGISTRY }}
+          username: ${{ secrets.ORAS_USERNAME }}
+          password: ${{ secrets.ORAS_PASSWORD }}
+          repository: artifacts/starry-sky
+          tag: ${{ env.TAG_NAME }}
+          files: |
+            StarrySky.vsix
+          manifest-annotations: "pushed-by=github-actions"

@@ -23,6 +23,13 @@ jobs:
       build-mode: 'ci'
     if: github.event_name == 'pull_request'
 
+  # Push to ORAS registry Job
+  push:
+    needs: ci-build
+    uses: ./.github/workflows/push.yaml
+    with:
+      artifact-name: ${{ needs.ci-build.outputs.artifact-name }}
+
   # Build Job for Release
   release-build:
     uses: ./.github/workflows/build.yaml
