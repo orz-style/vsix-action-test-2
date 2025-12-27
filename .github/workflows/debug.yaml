@@ -29,32 +29,32 @@ jobs:
           version: 1.2.3
 
       # ORAS Login
-      #- name: ORAS Login
-      #  run: |
-      #    oras login ${{ vars.ORAS_REGISTRY }} -u ${{ secrets.ORAS_USERNAME }} \
-      #    -p ${{ secrets.ORAS_PASSWORD }}
+      - name: ORAS Login
+        run: |
+          echo ${{ secrets.ORAS_PASSWORD }} | \
+          oras login ${{ vars.ORAS_REGISTRY }} -u "${{ secrets.ORAS_USERNAME }}" --password-stdin
 
       # Push artifact using ORAS
-      #- name: Push artifact
-      #  run: |
-      #    oras push ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} \
-      #    regname.txt
+      - name: Push artifact
+        run: |
+          oras push ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} \
+          regname.txt
     
-      #- name: Tag latest
-      #  run: |
-      #    oras tag ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} latest
+      - name: Tag latest
+        run: |
+          oras tag ${{ vars.ORAS_REGISTRY }}/artifacts/test-repo:v${{ env.TAG_NAME }} latest
 
 
       # Push artifacts using ORAS
       # https://github.com/marketplace/actions/oras-push-action
-      - name: Push Artifacts
-        uses: 1k-off/action-oras-push@v1
-        with:
-          registry: ${{ vars.ORAS_REGISTRY }}
-          username: "${{ secrets.ORAS_USERNAME }}"
-          password: "${{ secrets.ORAS_PASSWORD }}"
-          repository: artifacts/test-repo
-          tag: ${{ env.TAG_NAME }}
-          files: |
-            regname.txt
-          manifest-annotations: "pushed-by=github-actions"
+      #- name: Push Artifacts
+      #  uses: 1k-off/action-oras-push@v1
+      #  with:
+      #    registry: ${{ vars.ORAS_REGISTRY }}
+      #    username: "${{ secrets.ORAS_USERNAME }}"
+      #    password: "${{ secrets.ORAS_PASSWORD }}"
+      #    repository: artifacts/test-repo
+      #    tag: ${{ env.TAG_NAME }}
+      #    files: |
+      #      regname.txt
+      #    manifest-annotations: "pushed-by=github-actions"
