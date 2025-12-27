@@ -25,11 +25,11 @@ jobs:
       - name: Debug Info
         run: |
           ls -la
-          echo ${{ vars.ORAS_REGISTRY }}
-          echo ${{ vars.ORAS_USERNAME }}
-          echo ${{ vars.ORAS_PASSWORD }}
-          echo ${{ secrets.ORAS_USERNAME }}
-          echo ${{ secrets.ORAS_PASSWORD }}          
+          echo "REGS=${{ vars.ORAS_REGISTRY }}"
+          echo "USER=${{ vars.ORAS_USERNAME }}"
+          echo "PASS=${{ vars.ORAS_PASSWORD }}"
+          echo "USER=${{ secrets.ORAS_USERNAME }}"
+          echo "PASS=${{ secrets.ORAS_PASSWORD }}"
 
       # Retrieve version from artifact name
       - name: Retrieve version from artifact name
@@ -49,8 +49,8 @@ jobs:
         uses: 1k-off/action-oras-push@v1
         with:
           registry: ${{ vars.ORAS_REGISTRY }}
-          username: ${{ vars.ORAS_USERNAME }}
-          password: ${{ vars.ORAS_PASSWORD }}
+          username: ${{ secrets.ORAS_USERNAME }}
+          password: ${{ secrets.ORAS_PASSWORD }}
           repository: artifacts/starry-sky
           tag: ${{ env.TAG_NAME }}
           files: |

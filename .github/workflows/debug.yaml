@@ -1,0 +1,18 @@
+name: Debug
+
+on:
+  workflow_dispatch:
+
+jobs:
+  debug:
+    name: debug
+    runs-on: ubuntu-latest
+    steps:
+      - name: Debug Info
+        run: |
+          ls -la
+          echo "REGS=${{ vars.ORAS_REGISTRY }}"
+          echo "USER=${{ vars.ORAS_USERNAME }}"
+          echo "PASS=${{ vars.ORAS_PASSWORD }}"
+          echo "USER=${{ secrets.ORAS_USERNAME }}"
+          echo "PASS=${{ secrets.ORAS_PASSWORD }}"
