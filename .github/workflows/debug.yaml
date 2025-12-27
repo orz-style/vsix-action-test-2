@@ -32,7 +32,7 @@ jobs:
       - name: ORAS Login
         run: |
           echo ${{ secrets.ORAS_PASSWORD }} | \
-          oras login ${{ vars.ORAS_REGISTRY }} -u "${{ secrets.ORAS_USERNAME }}" --password-stdin
+          oras login ${{ vars.ORAS_REGISTRY }} -u '${{ secrets.ORAS_USERNAME }}' --password-stdin
 
       # Push artifact using ORAS
       - name: Push artifact
