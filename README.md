@@ -6,4 +6,4 @@
 
 Why doesn't release drafter work well?
 
-## Test of oras push v4
+## Test of oras push v5
